@@ -1,5 +1,7 @@
 package test;
 
+import java.util.function.Function;
+
 import org.joda.time.DateTime;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -42,6 +44,8 @@ public class Embajada {
 		driver.switchTo().frame("BODY_WIN");
 
 		WebDriverWait wait10 = new WebDriverWait(driver, 10);
+		WebDriverWait wait100 = new WebDriverWait(driver, 100);
+
 
 		wait10.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("MENU_WIN"));
 
@@ -64,8 +68,8 @@ public class Embajada {
 		try {
 			long timeToSleep = getTimeToSleep();
 			System.out.println("time to sleep " + timeToSleep);
-			Thread.sleep(timeToSleep);
-//			Thread.sleep(5000);
+//			Thread.sleep(timeToSleep);
+			Thread.sleep(1000);
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -76,9 +80,9 @@ public class Embajada {
 
 		driver.findElement(By.id("boutonSuivant")).click();
 
-//		wait10.until(ExpectedConditions.alertIsPresent());
-//		Alert alert = driver.switchTo().alert();
-//		alert.accept();
+		wait10.until(ExpectedConditions.alertIsPresent());
+		Alert alert = driver.switchTo().alert();
+		alert.accept();
 
 		driver.switchTo().defaultContent();
 
@@ -86,21 +90,33 @@ public class Embajada {
 
 		wait10.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("CONTENU_WIN"));
 
-		int childNumber = (int) Math.floor(Math.random() * 3) + 1;
+		int childNumber = (int) Math.floor(Math.random() * 3);
 
-		String childSelector = "//*[@id=\"compTableau_tbody\"]/tr[" + childNumber + "]/td[1]/a";
+//		String childSelector = "//*[@id=\"compTableau_tbody\"]/tr[" + childNumber + "]/td[1]/a";
 
 //		childSelector = "//*[@id=\"Tbody_Calendrier\"]/tr[9]/td[9]";
 
-		System.out.println("Antes del segundo siguiente: " + new DateTime());
+		System.out.println("Esperamos por la funcion que selecciona los horarios: " + new DateTime());
 
-		wait10.until(ExpectedConditions.elementToBeClickable(By.xpath(childSelector))).click();
+
+		wait100.until(new Function<WebDriver, Boolean>() {
+	        public Boolean apply(WebDriver driver) {
+	            return (Boolean) ((JavascriptExecutor) driver).executeScript("return (compTableau!=undefined && compTableau.appelAction!=undefined)");
+	        }
+	    });
+		//posible ingreso al condicional compTableau.itemLigneAction mayor a 0
+		System.out.println("Funcion encontrada: " + new DateTime());
+
+		//javascript:compTableau.appelAction(0,0) wait10.until(ExpectedConditions.elementToBeClickable(By.xpath(childSelector))).click();
 
 		// driver.findElement(By.xpath(childSelector)).click();
 
 		// wait10.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#compTableau_tbody")));
+		String childScript = "javascript:compTableau.appelAction(0,"+childNumber+")";
+		System.out.println("Ejecutamos la funcion "+childScript+" : " + new DateTime());
+		((JavascriptExecutor) driver).executeScript(childScript);
 
-		System.out.println("Click en segundo siguiente: " + new DateTime());
+		System.out.println("Ejecutamos el segundo siguiente: " + new DateTime());
 
 		// wait10.until(ExpectedConditions.(By.id("boutonSuivant")));
 
