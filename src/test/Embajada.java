@@ -12,9 +12,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Embajada {
-	public static long getTimeToSleep() {
+	public static long getTimeToSleep(int hour, int minute, int second) {
 		DateTime now = new DateTime();
-		DateTime after = (now).withHourOfDay(19).withMinuteOfHour(59).withSecondOfMinute(58).withMillisOfSecond(0);
+		DateTime after = (now).withHourOfDay(hour).withMinuteOfHour(minute).withSecondOfMinute(second).withMillisOfSecond(0);
 //		DateTime after = (now).withHourOfDay(20).withMinuteOfHour(25).withSecondOfMinute(30).withMillisOfSecond(750);
 
 		DateTime diff = after.minus(now.getMillis());
@@ -27,6 +27,17 @@ public class Embajada {
 		// declaration and instantiation of objects/variables
 		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
 		WebDriver driver = new ChromeDriver();
+		
+		try {
+			long timeToSleep = getTimeToSleep(1,9,0);
+			System.out.println("time to sleep " + timeToSleep);
+			Thread.sleep(timeToSleep);
+//			Thread.sleep(1000);
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// comment the above 2 lines and uncomment below 2 lines to use Chrome
 		String baseUrl = "https://pastel.diplomatie.gouv.fr/rdvinternet/html-4.02.00/frameset/frameset.html?lcid=1&sgid=74&suid=14";
 
@@ -66,10 +77,10 @@ public class Embajada {
 		driver.findElement(By.cssSelector("input[id=ccg]")).click();
 
 		try {
-			long timeToSleep = getTimeToSleep();
+			long timeToSleep = getTimeToSleep(19,59,58);
 			System.out.println("time to sleep " + timeToSleep);
-//			Thread.sleep(timeToSleep);
-			Thread.sleep(1000);
+			Thread.sleep(timeToSleep);
+//			Thread.sleep(1000);
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -80,9 +91,9 @@ public class Embajada {
 
 		driver.findElement(By.id("boutonSuivant")).click();
 
-		wait10.until(ExpectedConditions.alertIsPresent());
-		Alert alert = driver.switchTo().alert();
-		alert.accept();
+//		wait10.until(ExpectedConditions.alertIsPresent());
+//		Alert alert = driver.switchTo().alert();
+//		alert.accept();
 
 		driver.switchTo().defaultContent();
 
