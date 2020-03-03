@@ -12,9 +12,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Embajada {
-	public static long getTimeToSleep(int hour, int minute, int second) {
+	public static long getTimeToSleep(int hour, int minute, int second, int millisecond) {
 		DateTime now = new DateTime();
-		DateTime after = (now).withHourOfDay(hour).withMinuteOfHour(minute).withSecondOfMinute(second).withMillisOfSecond(0);
+		DateTime after = (now).withHourOfDay(hour).withMinuteOfHour(minute).withSecondOfMinute(second).withMillisOfSecond(millisecond);
 //		DateTime after = (now).withHourOfDay(20).withMinuteOfHour(25).withSecondOfMinute(30).withMillisOfSecond(750);
 
 		DateTime diff = after.minus(now.getMillis());
@@ -26,10 +26,11 @@ public class Embajada {
 	public static void main(String[] args) {
 		// declaration and instantiation of objects/variables
 		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+		
 		WebDriver driver = new ChromeDriver();
 		
 		try {
-			long timeToSleep = getTimeToSleep(1,9,0);
+			long timeToSleep = getTimeToSleep(19,50,0,0);
 			System.out.println("time to sleep " + timeToSleep);
 			Thread.sleep(timeToSleep);
 //			Thread.sleep(1000);
@@ -77,7 +78,7 @@ public class Embajada {
 		driver.findElement(By.cssSelector("input[id=ccg]")).click();
 
 		try {
-			long timeToSleep = getTimeToSleep(19,59,58);
+			long timeToSleep = getTimeToSleep(19,59,58,500);
 			System.out.println("time to sleep " + timeToSleep);
 			Thread.sleep(timeToSleep);
 //			Thread.sleep(1000);
